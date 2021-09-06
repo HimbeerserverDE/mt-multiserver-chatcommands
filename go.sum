@@ -1,5 +1,11 @@
-github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20210906180757-0dacec809477 h1:s2ISAykP+CJdlZxbmEm3B9uHLApE+PhCeNBS5dkFVRc=
-github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20210906180757-0dacec809477/go.mod h1:8xnFy8wsJTDIUkMExnTq5fdiUNbnL6udwytjRM6woDw=
+github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20210906195555-148aeea7015b h1:lHteVdyxi/9dktAoZagM97yA70Ps+IgjL0Cu29TmwD0=
+github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20210906195555-148aeea7015b/go.mod h1:8xnFy8wsJTDIUkMExnTq5fdiUNbnL6udwytjRM6woDw=
+github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20210906200942-88ca42519c2d h1:QnLP3wQxi+Mrb9XMCB++hCwWZtnnky1ukGGQiyMAIzs=
+github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20210906200942-88ca42519c2d/go.mod h1:8xnFy8wsJTDIUkMExnTq5fdiUNbnL6udwytjRM6woDw=
+github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20210906212316-fc03b5c6db34 h1:y9jZYc0u9uGAeZeZLAkOOaNdt9WTBNL3QdecaTHx4tQ=
+github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20210906212316-fc03b5c6db34/go.mod h1:8xnFy8wsJTDIUkMExnTq5fdiUNbnL6udwytjRM6woDw=
+github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20210906212651-d55fa7e1dfa9 h1:QN/6lYORl+xmMs09tGPDatpsaHDejBR8e+nISCezag4=
+github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20210906212651-d55fa7e1dfa9/go.mod h1:8xnFy8wsJTDIUkMExnTq5fdiUNbnL6udwytjRM6woDw=
 github.com/HimbeerserverDE/srp v0.0.0-20210331172529-2b5dbec6b82b h1:xqNC1S76U5U+eFyzr5Ld+8aPOLaDFCw6f1uddjui+h8=
 github.com/HimbeerserverDE/srp v0.0.0-20210331172529-2b5dbec6b82b/go.mod h1:pxNH8S2nh4n2DWE0ToX5GnnDr/uEAuaAhJsCpkDLIWw=
 github.com/anon55555/mt v0.0.0-20210623155243-152b6697e62c h1:+T4M4zm8QMMnH56jopsKcCBxItSsb6jtulB3ZKFYETU=
