@@ -1,14 +1,14 @@
 package main
 
 import (
+	"strings"
+
 	"github.com/HimbeerserverDE/mt-multiserver-proxy"
 )
 
-func HandleChatCmd(cc *proxy.ClientConn, cmd string, args []string) bool {
-	switch cmd {
-	default:
-		return false
+func init() {
+	testCmd := func(cc *proxy.ClientConn, args ...string) string {
+		return strings.Join(args, " ")
 	}
-
-	return true
+	proxy.RegisterChatCmd("test", testCmd)
 }
