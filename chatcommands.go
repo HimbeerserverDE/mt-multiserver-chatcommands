@@ -58,6 +58,10 @@ func init() {
 		Name: "alert",
 		Perm: "cmd_alert",
 		Handler: func(cc *proxy.ClientConn, args ...string) string {
+			if len(args) <= 0 {
+				return "Usage: alert <message>"
+			}
+
 			msg := strings.Join(args, " ")
 			for clt := range proxy.Clts() {
 				clt.SendChatMsg(msg)
@@ -71,7 +75,7 @@ func init() {
 		Perm: "cmd_send",
 		Handler: func(cc *proxy.ClientConn, args ...string) string {
 			if len(args) != 2 {
-				return "Usage: send <player | current | all> <server> [name]"
+				return "Usage: send <player <server> <name> | current <server> | all <server>>"
 			}
 
 			var found bool
@@ -88,6 +92,10 @@ func init() {
 
 			switch args[0] {
 			case "player":
+				if len(args) != 3 {
+					return "Usage: send <player <server> <name> | current <server> | all <server>>"
+				}
+
 				if args[1] == cc.ServerName() {
 					return "Player is already connected to this server."
 				}
@@ -163,7 +171,7 @@ func init() {
 		Name: "perms",
 		Perm: "cmd_perms",
 		Handler: func(cc *proxy.ClientConn, args ...string) string {
-			return "Your permissions: " + strings.Join(cc.Perms(), " ")
+			return "Your permissions: " + strings.Join(cc.Perms(), ", ")
 		},
 	})
 	proxy.RegisterChatCmd(proxy.ChatCmd{
