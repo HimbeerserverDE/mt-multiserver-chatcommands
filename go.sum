@@ -16,6 +16,10 @@ github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20210909160525-4f15ec2a77
 github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20210909160525-4f15ec2a77e4/go.mod h1:8xnFy8wsJTDIUkMExnTq5fdiUNbnL6udwytjRM6woDw=
 github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20210909163043-b3f3765a07f4 h1:1YKel6f1UKc49DFS6EhZlK+q29k0RgfLmDllts+aN60=
 github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20210909163043-b3f3765a07f4/go.mod h1:8xnFy8wsJTDIUkMExnTq5fdiUNbnL6udwytjRM6woDw=
+github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20210909184036-e87116961b69 h1:1dUfBeRqyFq39keAxNQKrYkdPH774aVfULllgkGf3AI=
+github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20210909184036-e87116961b69/go.mod h1:8xnFy8wsJTDIUkMExnTq5fdiUNbnL6udwytjRM6woDw=
+github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20210909185315-5067bf94403c h1:i/ybvwyan8IisqAWGw2HLRha/nE85/eqY/Gua3Cju0k=
+github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20210909185315-5067bf94403c/go.mod h1:8xnFy8wsJTDIUkMExnTq5fdiUNbnL6udwytjRM6woDw=
 github.com/HimbeerserverDE/srp v0.0.0-20210331172529-2b5dbec6b82b h1:xqNC1S76U5U+eFyzr5Ld+8aPOLaDFCw6f1uddjui+h8=
 github.com/HimbeerserverDE/srp v0.0.0-20210331172529-2b5dbec6b82b/go.mod h1:pxNH8S2nh4n2DWE0ToX5GnnDr/uEAuaAhJsCpkDLIWw=
 github.com/anon55555/mt v0.0.0-20210623155243-152b6697e62c h1:+T4M4zm8QMMnH56jopsKcCBxItSsb6jtulB3ZKFYETU=
