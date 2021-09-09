@@ -74,7 +74,7 @@ func init() {
 		Name: "send",
 		Perm: "cmd_send",
 		Handler: func(cc *proxy.ClientConn, args ...string) string {
-			if len(args) != 2 {
+			if len(args) < 2 {
 				return "Usage: send <player <server> <name> | current <server> | all <server>>"
 			}
 
@@ -109,6 +109,10 @@ func init() {
 					clt.SendChatMsg("Could not switch servers. Reconnect if you encounter any problems. Error:", err.Error())
 				}
 			case "current":
+				if len(args) != 2 {
+					return "Usage: send <player <server> <name> | current <server> | all <server>>"
+				}
+
 				if args[1] == cc.ServerName() {
 					return "Start and destination are identical."
 				}
@@ -121,6 +125,10 @@ func init() {
 					}
 				}
 			case "all":
+				if len(args) != 2 {
+					return "Usage: send <player <server> <name> | current <server> | all <server>>"
+				}
+
 				for clt := range proxy.Clts() {
 					if clt.ServerName() != args[1] {
 						if err := clt.Hop(args[1]); err != nil {
@@ -184,7 +192,7 @@ func init() {
 					srvs[i] = srv.Name
 				}
 
-				return fmt.Sprintf("Connected to: %s | Servers: %s", cc.ServerName(), strings.Join(srvs, " "))
+				return fmt.Sprintf("Connected to: %s | Servers: %s", cc.ServerName(), strings.Join(srvs, ", "))
 			}
 
 			srv := strings.Join(args, " ")
