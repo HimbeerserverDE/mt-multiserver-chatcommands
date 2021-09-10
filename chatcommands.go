@@ -200,12 +200,70 @@ func init() {
 		},
 	})
 	proxy.RegisterChatCmd(proxy.ChatCmd{
+		Name:  "group",
+		Perm:  "cmd_group",
+		Help:  "Display the group of a player. Display your group if no player name is specified.",
+		Usage: "group [name]",
+		Handler: func(cc *proxy.ClientConn, args ...string) string {
+			if len(args) > 0 {
+				if len(args) != 1 {
+					return "Usage: group [name]"
+				}
+
+				grp, ok := proxy.Conf().UserGroups[args[0]]
+				if !ok {
+					grp = "default"
+				}
+
+				return "Group: " + grp
+			}
+
+			grp, ok := proxy.Conf().UserGroups[cc.Name()]
+			if !ok {
+				grp = "default"
+			}
+
+			return "Your group: " + grp
+		},
+	})
+	proxy.RegisterChatCmd(proxy.ChatCmd{
 		Name:  "perms",
 		Perm:  "cmd_perms",
 		Help:  "Show the permissions of a player. Show your permissions if no player name is specified.",
 		Usage: "perms [name]",
 		Handler: func(cc *proxy.ClientConn, args ...string) string {
+			if len(args) > 0 {
+				if len(args) != 1 {
+					return "Usage: perms [name]"
+				}
+
+				clt := proxy.Find(args[0])
+				if clt == nil {
+					return "Player not connected."
+				}
+
+				return "Player permissions: " + strings.Join(clt.Perms(), ", ")
+			}
+
 			return "Your permissions: " + strings.Join(cc.Perms(), ", ")
+		},
+	})
+	proxy.RegisterChatCmd(proxy.ChatCmd{
+		Name:  "gperms",
+		Perm:  "cmd_gperms",
+		Help:  "Show the permissions of a group.",
+		Usage: "gperms <group>",
+		Handler: func(cc *proxy.ClientConn, args ...string) string {
+			if len(args) != 1 {
+				return "Usage: gperms <group>"
+			}
+
+			perms, ok := proxy.Conf().Groups[args[0]]
+			if !ok {
+				return "Group not existent."
+			}
+
+			return "Group permissions: " + strings.Join(perms, ", ")
 		},
 	})
 	proxy.RegisterChatCmd(proxy.ChatCmd{
