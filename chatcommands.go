@@ -272,7 +272,11 @@ func init() {
 		Help:  "Display your current upstream server and all other configured servers. If a valid server name is specified, switch to that server.",
 		Usage: "server [server]",
 		Handler: func(cc *proxy.ClientConn, args ...string) string {
-			if len(args) == 0 {
+			if len(args) != 1 {
+				if len(args) > 1 {
+					return "Usage: server [server]"
+				}
+
 				srvs := make([]string, len(proxy.Conf().Servers))
 				for i, srv := range proxy.Conf().Servers {
 					srvs[i] = srv.Name
@@ -281,12 +285,23 @@ func init() {
 				return fmt.Sprintf("Connected to: %s | Servers: %s", cc.ServerName(), strings.Join(srvs, ", "))
 			}
 
-			srv := strings.Join(args, " ")
-			if cc.ServerName() == srv {
+			var found bool
+			for _, srv := range proxy.Conf().Servers {
+				if srv.Name == args[0] {
+					found = true
+					break
+				}
+			}
+
+			if !found {
+				return "Server not existent."
+			}
+
+			if cc.ServerName() == args[0] {
 				return "Already connected to this server."
 			}
 
-			if err := cc.Hop(srv); err != nil {
+			if err := cc.Hop(args[0]); err != nil {
 				return "Could not switch servers. Reconnect if you encounter any problems. Error: " + err.Error()
 			}
 
