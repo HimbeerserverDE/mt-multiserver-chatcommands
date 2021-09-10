@@ -10,8 +10,10 @@ import (
 
 func init() {
 	proxy.RegisterChatCmd(proxy.ChatCmd{
-		Name: "shutdown",
-		Perm: "cmd_shutdown",
+		Name:  "shutdown",
+		Perm:  "cmd_shutdown",
+		Help:  "Disconnect all clients and stop the server.",
+		Usage: "shutdown",
 		Handler: func(cc *proxy.ClientConn, args ...string) string {
 			proc, err := os.FindProcess(os.Getpid())
 			if err != nil {
@@ -23,8 +25,10 @@ func init() {
 		},
 	})
 	proxy.RegisterChatCmd(proxy.ChatCmd{
-		Name: "find",
-		Perm: "cmd_find",
+		Name:  "find",
+		Perm:  "cmd_find",
+		Help:  "Check whether a player is connected and report their upstream server if they are.",
+		Usage: "find <name>",
 		Handler: func(cc *proxy.ClientConn, args ...string) string {
 			if len(args) != 1 {
 				return "Usage: find <name>"
@@ -39,8 +43,10 @@ func init() {
 		},
 	})
 	proxy.RegisterChatCmd(proxy.ChatCmd{
-		Name: "addr",
-		Perm: "cmd_addr",
+		Name:  "addr",
+		Perm:  "cmd_addr",
+		Help:  "Find the network address of a player if they're connected.",
+		Usage: "addr <name>",
 		Handler: func(cc *proxy.ClientConn, args ...string) string {
 			if len(args) != 1 {
 				return "Usage: addr <name>"
@@ -55,14 +61,18 @@ func init() {
 		},
 	})
 	proxy.RegisterChatCmd(proxy.ChatCmd{
-		Name: "alert",
-		Perm: "cmd_alert",
+		Name:  "alert",
+		Perm:  "cmd_alert",
+		Help:  "Send a message to all connected clients regardless of their upstream server.",
+		Usage: "alert <message>",
 		Handler: func(cc *proxy.ClientConn, args ...string) string {
 			if len(args) <= 0 {
 				return "Usage: alert <message>"
 			}
 
-			msg := strings.Join(args, " ")
+			msg := "[ALERT] "
+			msg += strings.Join(args, " ")
+
 			for clt := range proxy.Clts() {
 				clt.SendChatMsg(msg)
 			}
@@ -71,8 +81,10 @@ func init() {
 		},
 	})
 	proxy.RegisterChatCmd(proxy.ChatCmd{
-		Name: "send",
-		Perm: "cmd_send",
+		Name:  "send",
+		Perm:  "cmd_send",
+		Help:  "Send player(s) to a new server. player causes a single player to be redirected, current affects all players that are on your current server and all affects everyone.",
+		Usage: "send <player <server> <name> | current <server> | all <server>>",
 		Handler: func(cc *proxy.ClientConn, args ...string) string {
 			if len(args) < 2 {
 				return "Usage: send <player <server> <name> | current <server> | all <server>>"
@@ -144,10 +156,16 @@ func init() {
 		},
 	})
 	proxy.RegisterChatCmd(proxy.ChatCmd{
-		Name: "players",
-		Perm: "cmd_players",
+		Name:  "players",
+		Perm:  "cmd_players",
+		Help:  "Show the player list of every server.",
+		Usage: "players",
 		Handler: func(cc *proxy.ClientConn, args ...string) string {
 			srvs := make(map[string][]*proxy.ClientConn)
+			for _, srv := range proxy.Conf().Servers {
+				srvs[srv.Name] = []*proxy.ClientConn{}
+			}
+
 			for clt := range proxy.Clts() {
 				srv := clt.ServerName()
 				srvs[srv] = append(srvs[srv], clt)
@@ -165,8 +183,10 @@ func init() {
 		},
 	})
 	proxy.RegisterChatCmd(proxy.ChatCmd{
-		Name: "reload",
-		Perm: "cmd_reload",
+		Name:  "reload",
+		Perm:  "cmd_reload",
+		Help:  "Reload the configuration file. You should restart the proxy instead if possible.",
+		Usage: "reload",
 		Handler: func(cc *proxy.ClientConn, args ...string) string {
 			if err := proxy.LoadConfig(); err != nil {
 				return "Configuration could not be reloaded. Old config is still active. Error: " + err.Error()
@@ -176,15 +196,19 @@ func init() {
 		},
 	})
 	proxy.RegisterChatCmd(proxy.ChatCmd{
-		Name: "perms",
-		Perm: "cmd_perms",
+		Name:  "perms",
+		Perm:  "cmd_perms",
+		Help:  "Show the permissions of a player. Show your permissions if no player name is specified.",
+		Usage: "perms [name]",
 		Handler: func(cc *proxy.ClientConn, args ...string) string {
 			return "Your permissions: " + strings.Join(cc.Perms(), ", ")
 		},
 	})
 	proxy.RegisterChatCmd(proxy.ChatCmd{
-		Name: "server",
-		Perm: "cmd_server",
+		Name:  "server",
+		Perm:  "cmd_server",
+		Help:  "Display your current upstream server and all other configured servers. If a valid server name is specified, switch to that server.",
+		Usage: "server [server]",
 		Handler: func(cc *proxy.ClientConn, args ...string) string {
 			if len(args) == 0 {
 				srvs := make([]string, len(proxy.Conf().Servers))
@@ -202,6 +226,75 @@ func init() {
 
 			if err := cc.Hop(srv); err != nil {
 				return "Could not switch servers. Reconnect if you encounter any problems. Error: " + err.Error()
+			}
+
+			return ""
+		},
+	})
+
+	proxy.RegisterChatCmd(proxy.ChatCmd{
+		Name:  "help",
+		Perm:  "cmd_help",
+		Help:  "Show help for a command (all commands if unspecified).",
+		Usage: "help [command]",
+		Handler: func(cc *proxy.ClientConn, args ...string) string {
+			cmds := proxy.ChatCmds()
+
+			help := func(name string) string {
+				str := proxy.Colorize(name+": ", "#6FF")
+				str += cmds[name].Help
+
+				return str
+			}
+
+			if len(args) != 1 {
+				if len(args) > 1 {
+					return "Usage: help [command]"
+				}
+
+				for cmd := range cmds {
+					cc.SendChatMsg(help(cmd))
+				}
+			} else {
+				if _, ok := cmds[args[0]]; !ok {
+					return "Inexistent command."
+				}
+
+				return help(args[0])
+			}
+
+			return ""
+		},
+	})
+	proxy.RegisterChatCmd(proxy.ChatCmd{
+		Name:  "usage",
+		Perm:  "cmd_usage",
+		Help:  "Show the usage string of a command (all commands if unspecified).",
+		Usage: "usage [command]",
+		Handler: func(cc *proxy.ClientConn, args ...string) string {
+			cmds := proxy.ChatCmds()
+
+			usage := func(name string) string {
+				str := proxy.Colorize(name+": ", "#6F3")
+				str += cmds[name].Usage
+
+				return str
+			}
+
+			if len(args) != 1 {
+				if len(args) > 1 {
+					return "Usage: usage [command]"
+				}
+
+				for cmd := range cmds {
+					cc.SendChatMsg(usage(cmd))
+				}
+			} else {
+				if _, ok := cmds[args[0]]; !ok {
+					return "Inexistent command."
+				}
+
+				return usage(args[0])
 			}
 
 			return ""
