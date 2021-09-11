@@ -318,10 +318,11 @@ func init() {
 				return "Usage: kick <name> [reason]"
 			}
 
-			reason := "Kicked by proxy."
+			reason := "Kicked by proxy. "
 			if len(args) >= 2 {
-				reason = strings.Join(args[1:], " ")
+				reason += strings.Join(args[1:], " ")
 			}
+			reason = strings.Trim(reason, " ")
 
 			clt := proxy.Find(args[0])
 			if clt == nil {
