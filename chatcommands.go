@@ -359,7 +359,7 @@ func init() {
 		Name:  "unban",
 		Perm:  "cmd_unban",
 		Help:  "Remove a player from the ban list. Accepts addresses and names.",
-		Usage: "unban <name>",
+		Usage: "unban <name | address>",
 		Handler: func(cc *proxy.ClientConn, args ...string) string {
 			if len(args) != 1 {
 				return "Usage: unban <name | address>"
