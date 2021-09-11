@@ -308,6 +308,30 @@ func init() {
 			return ""
 		},
 	})
+	proxy.RegisterChatCmd(proxy.ChatCmd{
+		Name:  "kick",
+		Perm:  "cmd_kick",
+		Help:  "Disconnect a player with an optional reason.",
+		Usage: "kick <name> [reason]",
+		Handler: func(cc *proxy.ClientConn, args ...string) string {
+			if len(args) < 1 {
+				return "Usage: kick <name> [reason]"
+			}
+
+			reason := "Kicked by proxy."
+			if len(args) >= 2 {
+				reason = strings.Join(args[1:], " ")
+			}
+
+			clt := proxy.Find(args[0])
+			if clt == nil {
+				return "Player not connected."
+			}
+
+			clt.Kick(reason)
+			return "Player kicked."
+		},
+	})
 
 	proxy.RegisterChatCmd(proxy.ChatCmd{
 		Name:  "help",
