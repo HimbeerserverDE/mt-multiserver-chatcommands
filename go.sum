@@ -38,6 +38,8 @@ github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20210911081853-83d208ed95
 github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20210911081853-83d208ed9510/go.mod h1:ZzKonpQA3kCRaL9oXnASb1EL3c4kKmqiN2I7WHtDA3Q=
 github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20210911082559-f46ce4b0028c h1:abahLdddcGAIN0CY16jbvEPBP0KIKNrC/EFhym+Zj3s=
 github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20210911082559-f46ce4b0028c/go.mod h1:ZzKonpQA3kCRaL9oXnASb1EL3c4kKmqiN2I7WHtDA3Q=
+github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20210911094938-6f2d293f12fb h1:N/ixJQ/vd3ySxD7rexT0IZDeW8rYguC9IYqSH5/XABo=
+github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20210911094938-6f2d293f12fb/go.mod h1:ZzKonpQA3kCRaL9oXnASb1EL3c4kKmqiN2I7WHtDA3Q=
 github.com/HimbeerserverDE/srp v0.0.0-20210331172529-2b5dbec6b82b h1:xqNC1S76U5U+eFyzr5Ld+8aPOLaDFCw6f1uddjui+h8=
 github.com/HimbeerserverDE/srp v0.0.0-20210331172529-2b5dbec6b82b/go.mod h1:pxNH8S2nh4n2DWE0ToX5GnnDr/uEAuaAhJsCpkDLIWw=
 github.com/anon55555/mt v0.0.0-20210623155243-152b6697e62c h1:+T4M4zm8QMMnH56jopsKcCBxItSsb6jtulB3ZKFYETU=

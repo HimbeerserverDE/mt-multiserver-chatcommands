@@ -333,6 +333,45 @@ func init() {
 			return "Player kicked."
 		},
 	})
+	proxy.RegisterChatCmd(proxy.ChatCmd{
+		Name:  "ban",
+		Perm:  "cmd_ban",
+		Help:  "Ban a player from using the proxy.",
+		Usage: "ban <name>",
+		Handler: func(cc *proxy.ClientConn, args ...string) string {
+			if len(args) != 1 {
+				return "Usage: ban <name>"
+			}
+
+			clt := proxy.Find(args[0])
+			if clt == nil {
+				return "Player not connected."
+			}
+
+			if err := clt.Ban(); err != nil {
+				return "Could not ban. Error: " + err.Error()
+			}
+
+			return "Player banned."
+		},
+	})
+	proxy.RegisterChatCmd(proxy.ChatCmd{
+		Name:  "unban",
+		Perm:  "cmd_unban",
+		Help:  "Remove a player from the ban list. Accepts addresses and names.",
+		Usage: "unban <name>",
+		Handler: func(cc *proxy.ClientConn, args ...string) string {
+			if len(args) != 1 {
+				return "Usage: unban <name | address>"
+			}
+
+			if err := proxy.Unban(args[0]); err != nil {
+				return "Could not unban. Error: " + err.Error()
+			}
+
+			return "Player unbanned."
+		},
+	})
 
 	proxy.RegisterChatCmd(proxy.ChatCmd{
 		Name:  "help",
