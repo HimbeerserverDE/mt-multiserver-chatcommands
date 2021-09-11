@@ -372,6 +372,15 @@ func init() {
 			return "Player unbanned."
 		},
 	})
+	proxy.RegisterChatCmd(proxy.ChatCmd{
+		Name:  "uptime",
+		Perm:  "cmd_uptime",
+		Help:  "Show the uptime of the proxy.",
+		Usage: "uptime",
+		Handler: func(cc *proxy.ClientConn, args ...string) string {
+			return fmt.Sprintf("Uptime: %fs", proxy.Uptime().Seconds())
+		},
+	})
 
 	proxy.RegisterChatCmd(proxy.ChatCmd{
 		Name:  "help",
