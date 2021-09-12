@@ -411,9 +411,12 @@ func init() {
 			cmds := proxy.ChatCmds()
 
 			help := func(name string) string {
-				str := proxy.Colorize(name+": ", "#6FF")
-				str += cmds[name].Help
+				str := name + ": "
+				if cc != nil {
+					str = proxy.Colorize(name+": ", "#6FF")
+				}
 
+				str += cmds[name].Help
 				return str
 			}
 
@@ -449,7 +452,11 @@ func init() {
 			cmds := proxy.ChatCmds()
 
 			usage := func(name string) string {
-				str := proxy.Colorize(name+": ", "#6F3")
+				str := name + ": "
+				if cc != nil {
+					str = proxy.Colorize(name+": ", "#6F3")
+				}
+
 				if cc != nil || cmds[name].TelnetUsage == "" {
 					str += cmds[name].Usage
 				} else {
