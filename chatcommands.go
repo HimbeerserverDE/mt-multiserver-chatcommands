@@ -6,6 +6,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"strings"
 
@@ -18,7 +19,7 @@ func init() {
 		Perm:  "cmd_shutdown",
 		Help:  "Disconnect all clients and stop the server.",
 		Usage: "shutdown",
-		Handler: func(cc *proxy.ClientConn, args ...string) string {
+		Handler: func(cc *proxy.ClientConn, w io.Writer, args ...string) string {
 			proc, err := os.FindProcess(os.Getpid())
 			if err != nil {
 				return "Could not find process: " + err.Error()
@@ -33,7 +34,7 @@ func init() {
 		Perm:  "cmd_find",
 		Help:  "Check whether a player is connected and report their upstream server if they are.",
 		Usage: "find <name>",
-		Handler: func(cc *proxy.ClientConn, args ...string) string {
+		Handler: func(cc *proxy.ClientConn, w io.Writer, args ...string) string {
 			if len(args) != 1 {
 				return "Usage: find <name>"
 			}
@@ -51,7 +52,7 @@ func init() {
 		Perm:  "cmd_addr",
 		Help:  "Find the network address of a player if they're connected.",
 		Usage: "addr <name>",
-		Handler: func(cc *proxy.ClientConn, args ...string) string {
+		Handler: func(cc *proxy.ClientConn, w io.Writer, args ...string) string {
 			if len(args) != 1 {
 				return "Usage: addr <name>"
 			}
@@ -69,7 +70,7 @@ func init() {
 		Perm:  "cmd_alert",
 		Help:  "Send a message to all connected clients regardless of their upstream server.",
 		Usage: "alert <message>",
-		Handler: func(cc *proxy.ClientConn, args ...string) string {
+		Handler: func(cc *proxy.ClientConn, w io.Writer, args ...string) string {
 			if len(args) <= 0 {
 				return "Usage: alert <message>"
 			}
@@ -89,7 +90,7 @@ func init() {
 		Perm:  "cmd_send",
 		Help:  "Send player(s) to a new server. player causes a single player to be redirected, current affects all players that are on your current server and all affects everyone.",
 		Usage: "send <player <server> <name> | current <server> | all <server>>",
-		Handler: func(cc *proxy.ClientConn, args ...string) string {
+		Handler: func(cc *proxy.ClientConn, w io.Writer, args ...string) string {
 			if len(args) < 2 {
 				return "Usage: send <player <server> <name> | current <server> | all <server>>"
 			}
@@ -164,7 +165,7 @@ func init() {
 		Perm:  "cmd_players",
 		Help:  "Show the player list of every server.",
 		Usage: "players",
-		Handler: func(cc *proxy.ClientConn, args ...string) string {
+		Handler: func(cc *proxy.ClientConn, w io.Writer, args ...string) string {
 			srvs := make(map[string][]*proxy.ClientConn)
 			for _, srv := range proxy.Conf().Servers {
 				srvs[srv.Name] = []*proxy.ClientConn{}
@@ -191,7 +192,7 @@ func init() {
 		Perm:  "cmd_reload",
 		Help:  "Reload the configuration file. You should restart the proxy instead if possible.",
 		Usage: "reload",
-		Handler: func(cc *proxy.ClientConn, args ...string) string {
+		Handler: func(cc *proxy.ClientConn, w io.Writer, args ...string) string {
 			if err := proxy.LoadConfig(); err != nil {
 				return "Configuration could not be reloaded. Old config is still active. Error: " + err.Error()
 			}
@@ -200,11 +201,12 @@ func init() {
 		},
 	})
 	proxy.RegisterChatCmd(proxy.ChatCmd{
-		Name:  "group",
-		Perm:  "cmd_group",
-		Help:  "Display the group of a player. Display your group if no player name is specified.",
-		Usage: "group [name]",
-		Handler: func(cc *proxy.ClientConn, args ...string) string {
+		Name:        "group",
+		Perm:        "cmd_group",
+		Help:        "Display the group of a player. Display your group if no player name is specified.",
+		Usage:       "group [name]",
+		TelnetUsage: "group <name>",
+		Handler: func(cc *proxy.ClientConn, w io.Writer, args ...string) string {
 			if len(args) > 0 {
 				if len(args) != 1 {
 					return "Usage: group [name]"
@@ -218,6 +220,10 @@ func init() {
 				return "Group: " + grp
 			}
 
+			if cc == nil {
+				return "Telnet usage: group <name>"
+			}
+
 			grp, ok := proxy.Conf().UserGroups[cc.Name()]
 			if !ok {
 				grp = "default"
@@ -227,11 +233,12 @@ func init() {
 		},
 	})
 	proxy.RegisterChatCmd(proxy.ChatCmd{
-		Name:  "perms",
-		Perm:  "cmd_perms",
-		Help:  "Show the permissions of a player. Show your permissions if no player name is specified.",
-		Usage: "perms [name]",
-		Handler: func(cc *proxy.ClientConn, args ...string) string {
+		Name:        "perms",
+		Perm:        "cmd_perms",
+		Help:        "Show the permissions of a player. Show your permissions if no player name is specified.",
+		Usage:       "perms [name]",
+		TelnetUsage: "perms <name>",
+		Handler: func(cc *proxy.ClientConn, w io.Writer, args ...string) string {
 			if len(args) > 0 {
 				if len(args) != 1 {
 					return "Usage: perms [name]"
@@ -245,6 +252,10 @@ func init() {
 				return "Player permissions: " + strings.Join(clt.Perms(), ", ")
 			}
 
+			if cc == nil {
+				return "Telnet usage: perms <name>"
+			}
+
 			return "Your permissions: " + strings.Join(cc.Perms(), ", ")
 		},
 	})
@@ -253,7 +264,7 @@ func init() {
 		Perm:  "cmd_gperms",
 		Help:  "Show the permissions of a group.",
 		Usage: "gperms <group>",
-		Handler: func(cc *proxy.ClientConn, args ...string) string {
+		Handler: func(cc *proxy.ClientConn, w io.Writer, args ...string) string {
 			if len(args) != 1 {
 				return "Usage: gperms <group>"
 			}
@@ -267,11 +278,12 @@ func init() {
 		},
 	})
 	proxy.RegisterChatCmd(proxy.ChatCmd{
-		Name:  "server",
-		Perm:  "cmd_server",
-		Help:  "Display your current upstream server and all other configured servers. If a valid server name is specified, switch to that server.",
-		Usage: "server [server]",
-		Handler: func(cc *proxy.ClientConn, args ...string) string {
+		Name:        "server",
+		Perm:        "cmd_server",
+		Help:        "Display your current upstream server and all other configured servers. If a valid server name is specified, switch to that server.",
+		Usage:       "server [server]",
+		TelnetUsage: "server",
+		Handler: func(cc *proxy.ClientConn, w io.Writer, args ...string) string {
 			if len(args) != 1 {
 				if len(args) > 1 {
 					return "Usage: server [server]"
@@ -282,7 +294,15 @@ func init() {
 					srvs[i] = srv.Name
 				}
 
+				if cc == nil {
+					return "Servers: " + strings.Join(srvs, ", ")
+				}
+
 				return fmt.Sprintf("Connected to: %s | Servers: %s", cc.ServerName(), strings.Join(srvs, ", "))
+			}
+
+			if cc == nil {
+				return "Telnet usage: server"
 			}
 
 			var found bool
@@ -313,7 +333,7 @@ func init() {
 		Perm:  "cmd_kick",
 		Help:  "Disconnect a player with an optional reason.",
 		Usage: "kick <name> [reason]",
-		Handler: func(cc *proxy.ClientConn, args ...string) string {
+		Handler: func(cc *proxy.ClientConn, w io.Writer, args ...string) string {
 			if len(args) < 1 {
 				return "Usage: kick <name> [reason]"
 			}
@@ -338,7 +358,7 @@ func init() {
 		Perm:  "cmd_ban",
 		Help:  "Ban a player from using the proxy.",
 		Usage: "ban <name>",
-		Handler: func(cc *proxy.ClientConn, args ...string) string {
+		Handler: func(cc *proxy.ClientConn, w io.Writer, args ...string) string {
 			if len(args) != 1 {
 				return "Usage: ban <name>"
 			}
@@ -360,7 +380,7 @@ func init() {
 		Perm:  "cmd_unban",
 		Help:  "Remove a player from the ban list. Accepts addresses and names.",
 		Usage: "unban <name | address>",
-		Handler: func(cc *proxy.ClientConn, args ...string) string {
+		Handler: func(cc *proxy.ClientConn, w io.Writer, args ...string) string {
 			if len(args) != 1 {
 				return "Usage: unban <name | address>"
 			}
@@ -377,7 +397,7 @@ func init() {
 		Perm:  "cmd_uptime",
 		Help:  "Show the uptime of the proxy.",
 		Usage: "uptime",
-		Handler: func(cc *proxy.ClientConn, args ...string) string {
+		Handler: func(cc *proxy.ClientConn, w io.Writer, args ...string) string {
 			return fmt.Sprintf("Uptime: %fs", proxy.Uptime().Seconds())
 		},
 	})
@@ -387,7 +407,7 @@ func init() {
 		Perm:  "cmd_help",
 		Help:  "Show help for a command (all commands if unspecified).",
 		Usage: "help [command]",
-		Handler: func(cc *proxy.ClientConn, args ...string) string {
+		Handler: func(cc *proxy.ClientConn, w io.Writer, args ...string) string {
 			cmds := proxy.ChatCmds()
 
 			help := func(name string) string {
@@ -403,7 +423,11 @@ func init() {
 				}
 
 				for cmd := range cmds {
-					cc.SendChatMsg(help(cmd))
+					if cc != nil {
+						cc.SendChatMsg(help(cmd))
+					} else {
+						io.WriteString(w, help(cmd))
+					}
 				}
 			} else {
 				if _, ok := cmds[args[0]]; !ok {
@@ -421,12 +445,16 @@ func init() {
 		Perm:  "cmd_usage",
 		Help:  "Show the usage string of a command (all commands if unspecified).",
 		Usage: "usage [command]",
-		Handler: func(cc *proxy.ClientConn, args ...string) string {
+		Handler: func(cc *proxy.ClientConn, w io.Writer, args ...string) string {
 			cmds := proxy.ChatCmds()
 
 			usage := func(name string) string {
 				str := proxy.Colorize(name+": ", "#6F3")
-				str += cmds[name].Usage
+				if cc != nil || cmds[name].TelnetUsage == "" {
+					str += cmds[name].Usage
+				} else {
+					str += cmds[name].TelnetUsage
+				}
 
 				return str
 			}
@@ -437,7 +465,11 @@ func init() {
 				}
 
 				for cmd := range cmds {
-					cc.SendChatMsg(usage(cmd))
+					if cc != nil {
+						cc.SendChatMsg(usage(cmd))
+					} else {
+						io.WriteString(w, usage(cmd))
+					}
 				}
 			} else {
 				if _, ok := cmds[args[0]]; !ok {
