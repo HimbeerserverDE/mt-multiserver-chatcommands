@@ -178,7 +178,12 @@ func init() {
 
 			b := &strings.Builder{}
 			for srv, clts := range srvs {
-				b.WriteString(srv + ":\n")
+				if srv != "" {
+					b.WriteString(srv + ":\n")
+				} else {
+					b.WriteString("--- No server ---\n")
+				}
+
 				for _, clt := range clts {
 					b.WriteString("- " + clt.Name() + "\n")
 				}
