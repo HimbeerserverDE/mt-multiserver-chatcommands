@@ -1,5 +1,7 @@
 github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20210913190549-af91c9d9aef0 h1:LcoK40jRvVceGFH8IqfZ5T49U0RRZ/wNzRk6DWXgyVg=
 github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20210913190549-af91c9d9aef0/go.mod h1:wdMaixPfB72jL8gbKQEa86r8G12mr+hQqCvnx5tjZhA=
+github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20210913190940-dce73b5ab4ac h1:VSj54M+P4Y9/0uwYaLtVNhFCMLamYfuXG5cmPTTbzvc=
+github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20210913190940-dce73b5ab4ac/go.mod h1:wdMaixPfB72jL8gbKQEa86r8G12mr+hQqCvnx5tjZhA=
 github.com/HimbeerserverDE/srp v0.0.0-20210331172529-2b5dbec6b82b h1:xqNC1S76U5U+eFyzr5Ld+8aPOLaDFCw6f1uddjui+h8=
 github.com/HimbeerserverDE/srp v0.0.0-20210331172529-2b5dbec6b82b/go.mod h1:pxNH8S2nh4n2DWE0ToX5GnnDr/uEAuaAhJsCpkDLIWw=
 github.com/anon55555/mt v0.0.0-20210909184202-d6ba88b091f6 h1:JcKyABhWe6hGGA4IUqoCidNiKT1CCT6Sgp4D0VY7ako=
