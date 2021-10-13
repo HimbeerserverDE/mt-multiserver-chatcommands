@@ -2,7 +2,7 @@ module github.com/HimbeerserverDE/mt-multiserver-chatcommands
 
 go 1.17
 
-require github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20210915160049-44a4159bd062
+require github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20211013150212-432521a2ef1f
 
 require (
 	github.com/HimbeerserverDE/srp v0.0.0-20210331172529-2b5dbec6b82b // indirect

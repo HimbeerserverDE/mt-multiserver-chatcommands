@@ -10,7 +10,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/HimbeerserverDE/mt-multiserver-proxy"
+	proxy "github.com/HimbeerserverDE/mt-multiserver-proxy"
 )
 
 func init() {
