@@ -154,7 +154,7 @@ func init() {
 					}
 				}
 			default:
-				return "Usage: send <player | current | all> <server> [name]"
+				return "Usage: send <player <server> <name> | current <server> | all <server>>"
 			}
 
 			return ""
