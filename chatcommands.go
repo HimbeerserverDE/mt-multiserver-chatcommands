@@ -44,7 +44,7 @@ func init() {
 				return fmt.Sprintf("%s is connected to %s", clt.Name(), clt.ServerName())
 			}
 
-			return "Player not connected."
+			return "Player is not connected."
 		},
 	})
 	proxy.RegisterChatCmd(proxy.ChatCmd{
@@ -62,7 +62,7 @@ func init() {
 				return fmt.Sprintf("%s is at %s", clt.Name(), clt.RemoteAddr())
 			}
 
-			return "Player not connected."
+			return "Player is not connected."
 		},
 	})
 	proxy.RegisterChatCmd(proxy.ChatCmd{
@@ -86,13 +86,22 @@ func init() {
 		},
 	})
 	proxy.RegisterChatCmd(proxy.ChatCmd{
-		Name:  "send",
-		Perm:  "cmd_send",
-		Help:  "Send player(s) to a new server. player causes a single player to be redirected, current affects all players that are on your current server and all affects everyone.",
-		Usage: "send <player <server> <name> | current <server> | all <server>>",
+		Name:        "send",
+		Perm:        "cmd_send",
+		Help:        "Send player(s) to a new server. player causes a single player to be redirected, current affects all players that are on your current server and all affects everyone.",
+		Usage:       "send <player <server> <name> | current <server> | all <server>>",
+		TelnetUsage: "send <player <server> <name> | all <server>>",
 		Handler: func(cc *proxy.ClientConn, w io.Writer, args ...string) string {
+			usage := func() string {
+				if cc != nil {
+					return "Usage: send <player <server> <name> | current <server> | all <server>>"
+				} else {
+					return "Usage: send <player <server> <name> | all <server>>"
+				}
+			}
+
 			if len(args) < 2 {
-				return "Usage: send <player <server> <name> | current <server> | all <server>>"
+				return usage()
 			}
 
 			var found bool
@@ -104,30 +113,34 @@ func init() {
 			}
 
 			if !found {
-				return "Server not existent."
+				return "Server does not exist."
 			}
 
 			switch args[0] {
 			case "player":
 				if len(args) != 3 {
-					return "Usage: send <player <server> <name> | current <server> | all <server>>"
-				}
-
-				if args[1] == cc.ServerName() {
-					return "Player is already connected to this server."
+					return usage()
 				}
 
 				clt := proxy.Find(args[2])
 				if clt == nil {
-					return "Player not connected."
+					return "Player is not connected."
+				}
+
+				if args[1] == clt.ServerName() {
+					return "Player is already connected to this server."
 				}
 
 				if err := clt.Hop(args[1]); err != nil {
 					clt.SendChatMsg("Could not switch servers. Reconnect if you encounter any problems. Error:", err.Error())
 				}
 			case "current":
+				if cc == nil {
+					return usage()
+				}
+
 				if len(args) != 2 {
-					return "Usage: send <player <server> <name> | current <server> | all <server>>"
+					return usage()
 				}
 
 				if args[1] == cc.ServerName() {
@@ -143,7 +156,7 @@ func init() {
 				}
 			case "all":
 				if len(args) != 2 {
-					return "Usage: send <player <server> <name> | current <server> | all <server>>"
+					return usage()
 				}
 
 				for clt := range proxy.Clts() {
@@ -154,7 +167,7 @@ func init() {
 					}
 				}
 			default:
-				return "Usage: send <player | current | all> <server> [name]"
+				return usage()
 			}
 
 			return ""
@@ -251,7 +264,7 @@ func init() {
 
 				clt := proxy.Find(args[0])
 				if clt == nil {
-					return "Player not connected."
+					return "Player is not connected."
 				}
 
 				return "Player permissions: " + strings.Join(clt.Perms(), ", ")
@@ -276,7 +289,7 @@ func init() {
 
 			perms, ok := proxy.Conf().Groups[args[0]]
 			if !ok {
-				return "Group not existent."
+				return "Group does not exist."
 			}
 
 			return "Group permissions: " + strings.Join(perms, ", ")
@@ -319,7 +332,7 @@ func init() {
 			}
 
 			if !found {
-				return "Server not existent."
+				return "Server does not exist."
 			}
 
 			if cc.ServerName() == args[0] {
@@ -351,7 +364,7 @@ func init() {
 
 			clt := proxy.Find(args[0])
 			if clt == nil {
-				return "Player not connected."
+				return "Player is not connected."
 			}
 
 			clt.Kick(reason)
@@ -370,7 +383,7 @@ func init() {
 
 			clt := proxy.Find(args[0])
 			if clt == nil {
-				return "Player not connected."
+				return "Player is not connected."
 			}
 
 			if err := clt.Ban(); err != nil {
