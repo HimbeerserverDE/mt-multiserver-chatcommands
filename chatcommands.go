@@ -44,7 +44,7 @@ func init() {
 				return fmt.Sprintf("%s is connected to %s", clt.Name(), clt.ServerName())
 			}
 
-			return "Player not connected."
+			return "Player is not connected."
 		},
 	})
 	proxy.RegisterChatCmd(proxy.ChatCmd{
@@ -62,7 +62,7 @@ func init() {
 				return fmt.Sprintf("%s is at %s", clt.Name(), clt.RemoteAddr())
 			}
 
-			return "Player not connected."
+			return "Player is not connected."
 		},
 	})
 	proxy.RegisterChatCmd(proxy.ChatCmd{
@@ -104,7 +104,7 @@ func init() {
 			}
 
 			if !found {
-				return "Server not existent."
+				return "Server does not exist."
 			}
 
 			switch args[0] {
@@ -119,7 +119,7 @@ func init() {
 
 				clt := proxy.Find(args[2])
 				if clt == nil {
-					return "Player not connected."
+					return "Player is not connected."
 				}
 
 				if err := clt.Hop(args[1]); err != nil {
@@ -251,7 +251,7 @@ func init() {
 
 				clt := proxy.Find(args[0])
 				if clt == nil {
-					return "Player not connected."
+					return "Player is not connected."
 				}
 
 				return "Player permissions: " + strings.Join(clt.Perms(), ", ")
@@ -276,7 +276,7 @@ func init() {
 
 			perms, ok := proxy.Conf().Groups[args[0]]
 			if !ok {
-				return "Group not existent."
+				return "Group does not exist."
 			}
 
 			return "Group permissions: " + strings.Join(perms, ", ")
@@ -319,7 +319,7 @@ func init() {
 			}
 
 			if !found {
-				return "Server not existent."
+				return "Server does not exist."
 			}
 
 			if cc.ServerName() == args[0] {
@@ -351,7 +351,7 @@ func init() {
 
 			clt := proxy.Find(args[0])
 			if clt == nil {
-				return "Player not connected."
+				return "Player is not connected."
 			}
 
 			clt.Kick(reason)
@@ -370,7 +370,7 @@ func init() {
 
 			clt := proxy.Find(args[0])
 			if clt == nil {
-				return "Player not connected."
+				return "Player is not connected."
 			}
 
 			if err := clt.Ban(); err != nil {
