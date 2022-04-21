@@ -278,20 +278,34 @@ func init() {
 		},
 	})
 	proxy.RegisterChatCmd(proxy.ChatCmd{
-		Name:  "gperms",
-		Perm:  "cmd_gperms",
-		Help:  "Show the permissions of a group.",
-		Usage: "gperms <group>",
+		Name:        "gperms",
+		Perm:        "cmd_gperms",
+		Help:        "Show the permissions of a group.",
+		Usage:       "gperms [group]",
+		TelnetUsage: "gperms <group>",
 		Handler: func(cc *proxy.ClientConn, w io.Writer, args ...string) string {
-			if len(args) != 1 {
-				return "Usage: gperms <group>"
+			if len(args) > 0 {
+				if len(args) != 1 {
+					return "Usage: gperms [group]"
+				}
+
+				perms, ok := proxy.Conf().Groups[args[0]]
+				if !ok {
+					return "Group does not exist."
+				}
+				return "Group permissions: " + strings.Join(perms, ", ")
 			}
 
-			perms, ok := proxy.Conf().Groups[args[0]]
+			if cc == nil {
+				return "Telnet usage: gperms <group>"
+			}
+
+			grp, ok := proxy.Conf().UserGroups[cc.Name()]
 			if !ok {
-				return "Group does not exist."
+				grp = "default"
 			}
 
+			perms, _ := proxy.Conf().Groups[grp]
 			return "Group permissions: " + strings.Join(perms, ", ")
 		},
 	})
