@@ -104,15 +104,7 @@ func init() {
 				return usage()
 			}
 
-			var found bool
-			for _, srv := range proxy.Conf().Servers {
-				if srv.Name == args[1] {
-					found = true
-					break
-				}
-			}
-
-			if !found {
+			if _, ok := proxy.Conf().Servers[args[1]]; !ok {
 				return "Server does not exist."
 			}
 
@@ -180,10 +172,6 @@ func init() {
 		Usage: "players",
 		Handler: func(cc *proxy.ClientConn, w io.Writer, args ...string) string {
 			srvs := make(map[string][]*proxy.ClientConn)
-			for _, srv := range proxy.Conf().Servers {
-				srvs[srv.Name] = []*proxy.ClientConn{}
-			}
-
 			for clt := range proxy.Clts() {
 				srv := clt.ServerName()
 				srvs[srv] = append(srvs[srv], clt)
@@ -321,9 +309,9 @@ func init() {
 					return "Usage: server [server]"
 				}
 
-				srvs := make([]string, len(proxy.Conf().Servers))
-				for i, srv := range proxy.Conf().Servers {
-					srvs[i] = srv.Name
+				srvs := make([]string, 0, len(proxy.Conf().Servers))
+				for name := range proxy.Conf().Servers {
+					srvs = append(srvs, name)
 				}
 
 				if cc == nil {
@@ -337,15 +325,7 @@ func init() {
 				return "Telnet usage: server"
 			}
 
-			var found bool
-			for _, srv := range proxy.Conf().Servers {
-				if srv.Name == args[0] {
-					found = true
-					break
-				}
-			}
-
-			if !found {
+			if _, ok := proxy.Conf().Servers[args[0]]; !ok {
 				return "Server does not exist."
 			}
 
