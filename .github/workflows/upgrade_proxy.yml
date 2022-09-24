@@ -16,11 +16,15 @@ jobs:
         with:
           go-version: 1.18
 
-      - name: Upgrade
-        run: go get -u github.com/HimbeerserverDE/mt-multiserver-proxy
+      - name: Upgrade and tidy
+        run: |
+          go get -u github.com/HimbeerserverDE/mt-multiserver-proxy
+          go mod tidy
 
-      - uses: evantorrie/mott-the-tidier@v1-beta
-        with:
-          gomods: |
-            **/go.mod
-            -tools/go.mod
+      - name: Add, commit and push
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add go.mod go.sum
+          git commit -m "Upgrade proxy"
+          git push
