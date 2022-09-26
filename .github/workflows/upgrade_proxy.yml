@@ -28,3 +28,4 @@ jobs:
           git add go.mod go.sum
           git commit -m "Upgrade proxy"
           git push
+        continue-on-error: true
