@@ -1,8 +1,10 @@
 github.com/HimbeerserverDE/mt v0.0.0-20230608181626-b0bf21e31b42 h1:1ElDZQV07A/Iptgtq2pLNXD0ZV60wtd+7Hhjatfek34=
 github.com/HimbeerserverDE/mt v0.0.0-20230608181626-b0bf21e31b42/go.mod h1:RSf7NAuQ5zZC6CTPj5ey/uXPHOdu/oiIvHT8tH3fWK8=
-github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20230611121545-646324d22ef7 h1:1zbRjm/Ldpw1GGho666JwDR6IOr8Y7gbs+mKVR7mwQU=
-github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20230611121545-646324d22ef7/go.mod h1:VlsvWJKW/IYAzfPvn85I6iBAHYMKLZGq5dcvnvnCkUI=
+github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20230716145949-fe42a7101982 h1:JJM+2wOvMbDJGpWJKC/RiGYrqmVdt0ySs4Zf2kB/6+A=
+github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20230716145949-fe42a7101982/go.mod h1:UKxt5BAxxwpllbTc5JOVcPIehPzxRVeyzZxWb2ADj70=
 github.com/HimbeerserverDE/srp v0.0.0 h1:Iy2GIF7DJphXXO9NjncLEBO6VsZd8Yhrlxl/qTr09eE=
 github.com/HimbeerserverDE/srp v0.0.0/go.mod h1:pxNH8S2nh4n2DWE0ToX5GnnDr/uEAuaAhJsCpkDLIWw=
 github.com/klauspost/compress v1.16.5 h1:IFV2oUNUzZaz+XyusxpLzpzS8Pt5rh0Z16For/djlyI=
 github.com/klauspost/compress v1.16.5/go.mod h1:ntbaceVETuRiXiv4DpjP66DpAtAGkEQskQzEyD//IeE=
+github.com/mattn/go-sqlite3 v1.14.17 h1:mCRHCLDUBXgpKAqIKsaAaAsrAlbkeomtRFKXh2L6YIM=
+github.com/mattn/go-sqlite3 v1.14.17/go.mod h1:2eHXhiwb8IkHr+BDWZGa96P6+rkvnG63S2DGjv9HUNg=
