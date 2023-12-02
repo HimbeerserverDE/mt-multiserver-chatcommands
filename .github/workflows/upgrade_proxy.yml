@@ -1,8 +1,8 @@
 name: upgrade-proxy
 
 on:
-  schedule:
-  - cron: "15 * * * *"
+  repository_dispatch:
+    types: [push]
   workflow_dispatch:
 
 jobs:
