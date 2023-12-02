@@ -16,16 +16,19 @@ jobs:
         with:
           go-version: 1.18
 
-      - name: Upgrade and tidy
+      - name: Install mt-build-plugin
         run: |
-          go get -u github.com/HimbeerserverDE/mt-multiserver-proxy
-          go mod tidy
+          go install github.com/HimbeerserverDE/mt-multiserver-proxy/cmd/mt-build-plugin@latest
+
+      - name: Upgrade and verify build success
+        run: |
+          mt-build-plugin
 
       - name: Add, commit and push
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add go.mod go.sum
-          git commit -m "Upgrade proxy"
+          git commit -m "auto-upgrade proxy"
           git push
         continue-on-error: true
