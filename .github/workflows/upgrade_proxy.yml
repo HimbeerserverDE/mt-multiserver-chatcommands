@@ -2,7 +2,7 @@ name: upgrade-proxy
 
 on:
   repository_dispatch:
-    types: [push]
+    types: [proxy_update]
   workflow_dispatch:
 
 jobs:
