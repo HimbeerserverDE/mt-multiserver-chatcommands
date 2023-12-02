@@ -5,6 +5,7 @@ for mt-multiserver-proxy.
 package main
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -124,7 +125,15 @@ func init() {
 				}
 
 				if err := clt.Hop(args[1]); err != nil {
-					clt.SendChatMsg("Could not switch servers. Reconnect if you encounter any problems. Error:", err.Error())
+					cc.Log("<-", err)
+
+					if errors.Is(err, proxy.ErrNoSuchServer) {
+						return "Server does not exist."
+					} else if errors.Is(err, proxy.ErrNewMediaPool) {
+						return "The new server belongs to a media pool that is not present on this client. Please reconnect to access it."
+					}
+
+					return "Could not switch servers. Reconnect if you encounter any problems. Error: " + err.Error()
 				}
 			case "current":
 				if cc == nil {
@@ -142,7 +151,15 @@ func init() {
 				for clt := range proxy.Clts() {
 					if clt.ServerName() == cc.ServerName() && clt.ServerName() != args[1] {
 						if err := clt.Hop(args[1]); err != nil {
-							clt.SendChatMsg("Could not switch servers. Reconnect if you encounter any problems. Error:", err.Error())
+							cc.Log("<-", err)
+
+							if errors.Is(err, proxy.ErrNoSuchServer) {
+								return "Server does not exist."
+							} else if errors.Is(err, proxy.ErrNewMediaPool) {
+								return "The new server belongs to a media pool that is not present on this client. Please reconnect to access it."
+							}
+
+							return "Could not switch servers. Reconnect if you encounter any problems. Error: " + err.Error()
 						}
 					}
 				}
@@ -154,7 +171,15 @@ func init() {
 				for clt := range proxy.Clts() {
 					if clt.ServerName() != args[1] {
 						if err := clt.Hop(args[1]); err != nil {
-							clt.SendChatMsg("Could not switch servers. Reconnect if you encounter any problems. Error:", err.Error())
+							cc.Log("<-", err)
+
+							if errors.Is(err, proxy.ErrNoSuchServer) {
+								return "Server does not exist."
+							} else if errors.Is(err, proxy.ErrNewMediaPool) {
+								return "The new server belongs to a media pool that is not present on this client. Please reconnect to access it."
+							}
+
+							return "Could not switch servers. Reconnect if you encounter any problems. Error: " + err.Error()
 						}
 					}
 				}
@@ -325,15 +350,19 @@ func init() {
 				return "Telnet usage: server"
 			}
 
-			if _, ok := proxy.Conf().Servers[args[0]]; !ok {
-				return "Server does not exist."
-			}
-
 			if cc.ServerName() == args[0] {
 				return "Already connected to this server."
 			}
 
 			if err := cc.Hop(args[0]); err != nil {
+				cc.Log("<-", err)
+
+				if errors.Is(err, proxy.ErrNoSuchServer) {
+					return "Server does not exist."
+				} else if errors.Is(err, proxy.ErrNewMediaPool) {
+					return "The new server belongs to a media pool that is not present on this client. Please reconnect to access it."
+				}
+
 				return "Could not switch servers. Reconnect if you encounter any problems. Error: " + err.Error()
 			}
 
