@@ -2,7 +2,6 @@ name: upgrade-proxy
 
 on:
   repository_dispatch:
-  workflow_dispatch:
 
 jobs:
   upgrade_proxy:
@@ -16,8 +15,10 @@ jobs:
           go-version: 1.21.4
 
       - name: Install mt-build-plugin
+        env:
+          PROXYVER: ${{ github.event.client_payload.proxy_version }}
         run: |
-          go install github.com/HimbeerserverDE/mt-multiserver-proxy/cmd/mt-build-plugin@latest
+          go install github.com/HimbeerserverDE/mt-multiserver-proxy/cmd/mt-build-plugin@${PROXYVER}
 
       - name: Upgrade and verify build success
         run: |
