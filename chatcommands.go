@@ -123,15 +123,16 @@ func init() {
 				}
 
 				if err := clt.Hop(args[1]); err != nil {
-					cc.Log("<-", err)
+					clt.Log("<-", err)
 
 					if errors.Is(err, proxy.ErrNoSuchServer) {
 						return "Server does not exist."
 					} else if errors.Is(err, proxy.ErrNewMediaPool) {
-						return "The new server belongs to a media pool that is not present on this client. Please reconnect to access it."
+						return "The new server belongs to a media pool that is not present on this client."
 					}
 
-					return "Could not switch servers. Reconnect if you encounter any problems. Error: " + err.Error()
+					clt.SendChatMsg("Could not switch servers. Reconnect if you encounter any problems. Error:", err.Error())
+					return "Could not switch servers. Error: " + err.Error()
 				}
 			case "current":
 				if cc == nil {
@@ -149,15 +150,13 @@ func init() {
 				for clt := range proxy.Clts() {
 					if clt.ServerName() == cc.ServerName() && clt.ServerName() != args[1] {
 						if err := clt.Hop(args[1]); err != nil {
-							cc.Log("<-", err)
+							clt.Log("<-", err)
 
 							if errors.Is(err, proxy.ErrNoSuchServer) {
 								return "Server does not exist."
-							} else if errors.Is(err, proxy.ErrNewMediaPool) {
-								return "The new server belongs to a media pool that is not present on this client. Please reconnect to access it."
 							}
 
-							return "Could not switch servers. Reconnect if you encounter any problems. Error: " + err.Error()
+							clt.SendChatMsg("Could not switch servers. Reconnect if you encounter any problems. Error:", err.Error())
 						}
 					}
 				}
@@ -169,15 +168,13 @@ func init() {
 				for clt := range proxy.Clts() {
 					if clt.ServerName() != args[1] {
 						if err := clt.Hop(args[1]); err != nil {
-							cc.Log("<-", err)
+							clt.Log("<-", err)
 
 							if errors.Is(err, proxy.ErrNoSuchServer) {
 								return "Server does not exist."
-							} else if errors.Is(err, proxy.ErrNewMediaPool) {
-								return "The new server belongs to a media pool that is not present on this client. Please reconnect to access it."
 							}
 
-							return "Could not switch servers. Reconnect if you encounter any problems. Error: " + err.Error()
+							clt.SendChatMsg("Could not switch servers. Reconnect if you encounter any problems. Error:", err.Error())
 						}
 					}
 				}
@@ -357,7 +354,7 @@ func init() {
 					return "The new server belongs to a media pool that is not present on this client. Please reconnect to access it."
 				}
 
-				return "Could not switch servers. Reconnect if you encounter any problems. Error: " + err.Error()
+				return ""
 			}
 
 			return ""
