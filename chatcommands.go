@@ -512,7 +512,7 @@ func init() {
 					return "Already connected to this server after 5 attempts."
 				}
 
-				if err := cc.Hop(srv); err != nil {
+				if err := cc.HopGroup(srv); err != nil {
 					cc.Log("<-", err)
 
 					if errors.Is(err, proxy.ErrNoSuchServer) {
