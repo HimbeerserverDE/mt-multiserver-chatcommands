@@ -82,6 +82,15 @@ Description: Display your current upstream server and all other configured serve
 Usage: `server [server]`
 ```
 
+> `gserver`
+```
+Permission: cmd_gserver
+Description: Display the groups your current upstream server is in
+and all other configured groups. If a valid group name is specified,
+switch to a random server of that group.
+Usage: `gserver [group]`
+```
+
 > `kick`
 ```
 Permission: cmd_kick

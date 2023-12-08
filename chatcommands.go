@@ -341,6 +341,65 @@ func init() {
 		},
 	})
 	proxy.RegisterChatCmd(proxy.ChatCmd{
+		Name:  "gserver",
+		Perm:  "cmd_gserver",
+		Help:  "Display the groups your current upstream server is in and all other configured groups. If a valid group name is specified, switch to a random server of that group.",
+		Usage: "gserver [group]",
+		Handler: func(cc *proxy.ClientConn, args ...string) string {
+			if len(args) != 1 {
+				if len(args) > 1 {
+					return "Usage: gserver [group]"
+				}
+
+				conf := proxy.Conf()
+
+				srv, ok := conf.Servers[cc.ServerName()]
+				if !ok {
+					return "Not connected to a server."
+				}
+
+				groups := conf.ServerGroups()
+				srvGroups := strings.Join(srv.Groups, ", ")
+
+				allGroups := make([]string, 0, len(groups))
+				for group := range groups {
+					allGroups = append(allGroups, group)
+				}
+
+				return fmt.Sprintf("Connected to: %s | Groups: %s", srvGroups, strings.Join(allGroups, ", "))
+			}
+
+			for i := 0; i < 5; i++ {
+				srv, ok := proxy.Conf().RandomGroupServer(args[0])
+				if !ok {
+					return "Group does not exist."
+				}
+
+				if srv == args[0] {
+					return "Group is also a server."
+				}
+
+				if i == 4 && cc.ServerName() == srv {
+					return "Already connected to this server after 5 attempts."
+				}
+
+				if err := cc.Hop(srv); err != nil {
+					cc.Log("<-", err)
+
+					if errors.Is(err, proxy.ErrNoSuchServer) {
+						return "Server does not exist."
+					} else if errors.Is(err, proxy.ErrNewMediaPool) {
+						return "The new server belongs to a media pool that is not present on this client. Please reconnect to access it."
+					}
+
+					return ""
+				}
+			}
+
+			return ""
+		},
+	})
+	proxy.RegisterChatCmd(proxy.ChatCmd{
 		Name:  "kick",
 		Perm:  "cmd_kick",
 		Help:  "Disconnect a player with an optional reason.",
