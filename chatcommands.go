@@ -508,8 +508,12 @@ func init() {
 					return "Group is also a server."
 				}
 
-				if i == 4 && cc.ServerName() == srv {
-					return "Already connected to this server after 5 attempts."
+				if cc.ServerName() == srv {
+					if i == 4 {
+						return "Already connected to this server after 5 attempts."
+					} else {
+						continue
+					}
 				}
 
 				if err := cc.HopGroup(srv); err != nil {
