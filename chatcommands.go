@@ -186,6 +186,135 @@ func init() {
 		},
 	})
 	proxy.RegisterChatCmd(proxy.ChatCmd{
+		Name:  "gsend",
+		Perm:  "cmd_gsend",
+		Help:  "Send player(s) to a new server group. player causes a single player to be redirected, current affects all players that are on your current server and all affects everyone.",
+		Usage: "gsend <player <group> <name> | current <server> | all <server>>",
+		Handler: func(cc *proxy.ClientConn, args ...string) string {
+			usage := "Usage: gsend <player <group> <name> | current <server> | all <server>>"
+
+			if len(args) < 2 {
+				return usage
+			}
+
+			switch args[0] {
+			case "player":
+				if len(args) != 3 {
+					return usage
+				}
+
+				clt := proxy.Find(args[2])
+				if clt == nil {
+					return "Player is not connected."
+				}
+
+				for i := 0; i < 5; i++ {
+					srv, ok := proxy.Conf().RandomGroupServer(args[1])
+					if !ok {
+						return "Group does not exist."
+					}
+
+					if srv == args[1] {
+						return "Group is also a server."
+					}
+
+					if clt.ServerName() == srv {
+						if i == 4 {
+							return "Player is already connected to this server after 5 attempts."
+						} else {
+							continue
+						}
+					}
+
+					if err := clt.HopGroup(args[1]); err != nil {
+						clt.Log("<-", err)
+
+						if errors.Is(err, proxy.ErrNoSuchServer) {
+							return "Server does not exist."
+						} else if errors.Is(err, proxy.ErrNewMediaPool) {
+							return "The new server belongs to a media pool that is not present on this client."
+						}
+
+						clt.SendChatMsg("Could not switch servers. Reconnect if you encounter any problems. Error:", err.Error())
+						return "Could not switch servers. Error: " + err.Error()
+					}
+				}
+			case "current":
+				if len(args) != 2 {
+					return usage
+				}
+
+				for clt := range proxy.Clts() {
+					if clt.ServerName() == cc.ServerName() {
+						for i := 0; i < 5; i++ {
+							srv, ok := proxy.Conf().RandomGroupServer(args[1])
+							if !ok {
+								return "Group does not exist."
+							}
+
+							if srv == args[1] {
+								return "Group is also a server."
+							}
+
+							if srv == cc.ServerName() {
+								return "Start and destination are identical."
+							}
+
+							if clt.ServerName() == srv {
+								continue
+							}
+
+							if err := clt.HopGroup(args[1]); err != nil {
+								clt.Log("<-", err)
+
+								if errors.Is(err, proxy.ErrNoSuchServer) {
+									return "Server does not exist."
+								}
+
+								clt.SendChatMsg("Could not switch servers. Reconnect if you encounter any problems. Error:", err.Error())
+							}
+						}
+					}
+				}
+			case "all":
+				if len(args) != 2 {
+					return usage
+				}
+
+				for clt := range proxy.Clts() {
+					for i := 0; i < 5; i++ {
+						srv, ok := proxy.Conf().RandomGroupServer(args[1])
+						if !ok {
+							return "Group does not exist."
+						}
+
+						if srv == args[1] {
+							return "Group is also a server."
+						}
+
+						if clt.ServerName() == srv {
+							continue
+						}
+
+						if err := clt.HopGroup(args[1]); err != nil {
+							clt.Log("<-", err)
+
+							if errors.Is(err, proxy.ErrNoSuchServer) {
+								return "Server does not exist."
+							}
+
+							clt.SendChatMsg("Could not switch servers. Reconnect if you encounter any problems. Error:", err.Error())
+						}
+					}
+				}
+			default:
+				return usage
+			}
+
+			return ""
+		},
+	})
+	proxy.RegisterChatCmd(proxy.ChatCmd{
 		Name:  "players",
 		Perm:  "cmd_players",
 		Help:  "Show the player list of every server.",
