@@ -245,10 +245,6 @@ func init() {
 				return "Group: " + grp
 			}
 
-			if cc == nil {
-				return "Telnet usage: group <name>"
-			}
-
 			grp, ok := proxy.Conf().UserGroups[cc.Name()]
 			if !ok {
 				grp = "default"
@@ -276,10 +272,6 @@ func init() {
 				return "Player permissions: " + strings.Join(clt.Perms(), ", ")
 			}
 
-			if cc == nil {
-				return "Telnet usage: perms <name>"
-			}
-
 			return "Your permissions: " + strings.Join(cc.Perms(), ", ")
 		},
 	})
@@ -299,10 +291,6 @@ func init() {
 					return "Group does not exist."
 				}
 				return "Group permissions: " + strings.Join(perms, ", ")
-			}
-
-			if cc == nil {
-				return "Telnet usage: gperms <group>"
 			}
 
 			grp, ok := proxy.Conf().UserGroups[cc.Name()]
@@ -330,15 +318,7 @@ func init() {
 					srvs = append(srvs, name)
 				}
 
-				if cc == nil {
-					return "Servers: " + strings.Join(srvs, ", ")
-				}
-
 				return fmt.Sprintf("Connected to: %s | Servers: %s", cc.ServerName(), strings.Join(srvs, ", "))
-			}
-
-			if cc == nil {
-				return "Telnet usage: server"
 			}
 
 			if cc.ServerName() == args[0] {
