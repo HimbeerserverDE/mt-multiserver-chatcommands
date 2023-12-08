@@ -135,10 +135,6 @@ func init() {
 					return "Could not switch servers. Error: " + err.Error()
 				}
 			case "current":
-				if cc == nil {
-					return usage()
-				}
-
 				if len(args) != 2 {
 					return usage()
 				}
