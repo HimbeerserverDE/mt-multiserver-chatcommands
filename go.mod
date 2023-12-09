@@ -4,7 +4,7 @@ go 1.21
 
 toolchain go1.21.4
 
-require github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20231209140712-dc27b019acba
+require github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20231209165945-15ba78c11f25
 
 require (
 	github.com/HimbeerserverDE/mt v0.0.0-20231209140543-691802146fb0 // indirect
