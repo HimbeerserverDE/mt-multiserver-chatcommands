@@ -43,7 +43,7 @@ Example: `send player lobby bob`
 > `gsend`
 ```
 Permission: cmd_gsend
-Description: end player(s) to a new server group. player causes a single player to be r    edirected, current affects all players that are on your current server and all affects ever    yone.
+Description: Send player(s) to a new server group. player causes a single player to be redirected, current affects all players that are on your current server and all affects everyone.
 Usage: `gsend <player <group> <name> | current <group> | all <group>>`
 Example: `gsend player lobbies bob`
 ```
