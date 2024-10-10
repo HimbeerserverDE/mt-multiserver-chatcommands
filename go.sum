@@ -1,7 +1,7 @@
 github.com/HimbeerserverDE/mt v0.0.0-20240823094226-df181fce5c15 h1:86stIHwxjRe6LB0PJKSgFiM6/PpjgAjA7S/X1L22ub8=
 github.com/HimbeerserverDE/mt v0.0.0-20240823094226-df181fce5c15/go.mod h1:RSf7NAuQ5zZC6CTPj5ey/uXPHOdu/oiIvHT8tH3fWK8=
-github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20240823094619-53d8cfd7d042 h1:rlH7ECOb36A8AMkPf6ZqBnoQOxjIHSuBqgvCo/v51Cg=
-github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20240823094619-53d8cfd7d042/go.mod h1:Je0mybLm6M3HcJPGe9mOWfo0+YHJol/XXlu6UPcc0mM=
+github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20241010153109-2d92c42ab0f6 h1:mOJ84jDezMsPC4vLlLx1rUqtU7y+9IPJXXNo5firG6Q=
+github.com/HimbeerserverDE/mt-multiserver-proxy v0.0.0-20241010153109-2d92c42ab0f6/go.mod h1:Je0mybLm6M3HcJPGe9mOWfo0+YHJol/XXlu6UPcc0mM=
 github.com/HimbeerserverDE/srp v0.0.0 h1:Iy2GIF7DJphXXO9NjncLEBO6VsZd8Yhrlxl/qTr09eE=
 github.com/HimbeerserverDE/srp v0.0.0/go.mod h1:pxNH8S2nh4n2DWE0ToX5GnnDr/uEAuaAhJsCpkDLIWw=
 github.com/klauspost/compress v1.16.5/go.mod h1:ntbaceVETuRiXiv4DpjP66DpAtAGkEQskQzEyD//IeE=
