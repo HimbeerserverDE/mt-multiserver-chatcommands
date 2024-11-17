@@ -557,15 +557,23 @@ func init() {
 		Name:  "ban",
 		Perm:  "cmd_ban",
 		Help:  "Ban a player from using the proxy.",
-		Usage: "ban <name>",
+		Usage: "ban <name> [address]",
 		Handler: func(cc *proxy.ClientConn, args ...string) string {
-			if len(args) != 1 {
-				return "Usage: ban <name>"
+			if len(args) < 1 {
+				return "Usage: ban <name> [address]"
+			}
+
+			if len(args) == 2 {
+				if err := proxy.DefaultAuth().Ban(args[1], args[0]); err != nil {
+					return "Could not ban. Error: " + err.Error()
+				}
+
+				return "Address banned."
 			}
 
 			clt := proxy.Find(args[0])
 			if clt == nil {
-				return "Player is not connected."
+				return "Player is not connected. Usage: ban <name> <address>"
 			}
 
 			if err := clt.Ban(); err != nil {
