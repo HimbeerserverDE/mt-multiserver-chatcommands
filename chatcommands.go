@@ -585,7 +585,7 @@ func init() {
 				return "Usage: unban <name | address>"
 			}
 
-			if err := proxy.Unban(args[0]); err != nil {
+			if err := proxy.DefaultAuth().Unban(args[0]); err != nil {
 				return "Could not unban. Error: " + err.Error()
 			}
 
